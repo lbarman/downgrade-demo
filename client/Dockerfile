@@ -6,6 +6,4 @@ WORKDIR /client
 
 RUN apk add --no-cache nmap nmap-scripts nmap-nselibs nano
 
-ENV URL lbarman.ch
-
-CMD ["/client/startup.sh"]
+CMD ["/client/evil-program.sh"]
