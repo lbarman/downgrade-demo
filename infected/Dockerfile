@@ -1,9 +1,9 @@
 FROM alpine:3.5
 MAINTAINER Ludovic Barman <ludovic.barman@protonmail.com>
 
-COPY scripts /mitm
-WORKDIR /mitm
+COPY scripts /infected
+WORKDIR /infected
 
 RUN apk add --no-cache nmap nmap-scripts nmap-nselibs nano iptables
 
-CMD ["/mitm/interceptor.py"]
+CMD ["/infected/evil-program.sh"]
