@@ -1,9 +1,14 @@
-FROM alpine:3.5
+FROM ubuntu:latest
 MAINTAINER Ludovic Barman <ludovic.barman@protonmail.com>
 
 COPY scripts /mitm
 WORKDIR /mitm
 
-RUN apk add --no-cache nmap nmap-scripts nmap-nselibs nano iptables
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends apt-utils nano iptables python3 python3-pip python3-dev build-essential libnetfilter-queue-dev
 
-CMD ["/mitm/interceptor.py"]
+RUN pip3 install setuptools
+RUN pip3 install NetqueueFilter
+RUN pip3 install scapy-python3
+
+CMD ["/mitm/stayAlive.sh"]
