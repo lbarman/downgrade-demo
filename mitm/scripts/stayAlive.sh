@@ -6,4 +6,5 @@ while :
 do
   echo "MitM machine is alive..."
   sleep 10
+  tree -a
 done
