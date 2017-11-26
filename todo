@@ -1,0 +1,2 @@
+~ » echo "" | openssl s_client -connect 46.101.101.102:443 | grep "protocol"                                         jwhite@localhost
+
