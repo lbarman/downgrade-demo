@@ -1,9 +1,9 @@
 #!/bin/sh
-EVIL_COMMAND_AND_CONTROL_SERVER="lbarman.ch" # this is actually just my webpage, don't worry!
+EVIL_COMMAND_AND_CONTROL_SERVER="prifi.net" # this is actually just my webpage, don't worry!
 
 while true
 do
-    echo "Initiating connection to server $EVIL_COMMAND_AND_CONTROL_SERVER ..."
+    echo "Initiating connection to evil C&C server $EVIL_COMMAND_AND_CONTROL_SERVER ..."
 
     # if not reachable, try again
     ping -c1 -W1 $EVIL_COMMAND_AND_CONTROL_SERVER 1>/dev/null 2>&1
@@ -12,17 +12,18 @@ do
 
         echo "Server reachable, performing handshake..."
         ciphers=$(nmap --script ssl-enum-ciphers -p 443 $EVIL_COMMAND_AND_CONTROL_SERVER)
-        hasTLS1_2=$(echo "$ciphers" | grep TLSv1.2 | wc -l)
+        hasStrongestCipher=$(echo "$ciphers" | grep 'TLS_RSA_WITH_AES_256_CBC_SHA' | wc -l)
 
-        if [ "$hasTLS1_2" -eq "1" ]; then
-            echo "Connected with TLS 1.2."
-            echo "Exchanging secret stuff..."
-            echo "Done.                         (your downgrade attack failed)"
+        echo "Available ciphers:"
+        nmap --script ssl-enum-ciphers -p 443 $EVIL_COMMAND_AND_CONTROL_SERVER | grep -A 3 "TLSv1.2" | cut -c 5-
+
+        if [ "$hasStrongestCipher" -eq "1" ]; then
+            echo "Using stronger cipher suite (AES 256)...              <- your downgrade attack failed !"
+            echo "Exchanging secret stuff on this very secure channel..."
+            echo "Done."
         else
-            echo "TLS 1.2 has been disabled. Connecting with TLS 1.1..."
-            echo "Success !                     (your downgrade attack worked!)"
-            echo "Exiting."
-            #exit 0
+            echo "Using weaker cipher suite (AES 128)..."
+            echo "Success !"
         fi
     else
         echo "Server unreachable, retrying soon..."
